@@ -1,26 +1,26 @@
 import { FormikProvider, Form, useFormik } from 'formik';
 import React, { useState } from 'react';
-import { IRegister } from './types';
+import { IRegister } from '../../../interfaces/IRegister';
 import { RegisterSchema } from './validation';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import CropperDialog from '../../common/CropperDialog';
+import register from '../../../services/authentication';
 
 function RegisterPage() {
   const initialValues: IRegister = {
-    fistName: '',
-    secondName: '',
+    name: '',
+    surname: '',
     email: '',
-    phone: '',
-    photo: '',
+    avatar: '',
     password: '',
-    passwordConfirmation: '',
   };
 
   const onHandleSubmit = async (values: IRegister) => {
     console.log('Submit form ', values);
+    register(values);
   };
 
   const formik = useFormik({
@@ -39,14 +39,14 @@ function RegisterPage() {
           <div className='mb-3'>
             <CropperDialog
               onChange={setFieldValue}
-              field='photo'
-              error={errors.photo}
-              touched={touched.photo}
+              field='avatar'
+              error={errors.avatar}
+              touched={touched.avatar}
               aspectRation={1 / 1}
             />
           </div>
           <div className='mb-3'>
-            <label htmlFor='firstName' className='form-label'>
+            <label htmlFor='name' className='form-label'>
               Ваше ім'я
             </label>
             <input
@@ -54,19 +54,19 @@ function RegisterPage() {
               className={classNames(
                 'form-control',
                 {
-                  'is-invalid': touched.fistName && errors.fistName,
+                  'is-invalid': touched.name && errors.name,
                 },
                 {
-                  'is-valid': touched.fistName && !errors.fistName,
+                  'is-valid': touched.name && !errors.name,
                 },
               )}
               placeholder='Приклад: Вадим...'
-              id='firstName'
-              name='firstName'
+              id='name'
+              name='name'
               onChange={handleChange}
             />
-            {touched.fistName && errors.fistName && (
-              <div className='invalid-feedback'>{errors.fistName}</div>
+            {touched.name && errors.name && (
+              <div className='invalid-feedback'>{errors.name}</div>
             )}
           </div>
           <div className='mb-3'>
@@ -78,19 +78,19 @@ function RegisterPage() {
               className={classNames(
                 'form-control',
                 {
-                  'is-invalid': touched.secondName && errors.secondName,
+                  'is-invalid': touched.surname && errors.surname,
                 },
                 {
-                  'is-valid': touched.secondName && !errors.secondName,
+                  'is-valid': touched.surname && !errors.surname,
                 },
               )}
               placeholder='Приклад: Чорний...'
-              id='secondName'
-              name='secondName'
+              id='surname'
+              name='surname'
               onChange={handleChange}
             />
-            {touched.secondName && errors.secondName && (
-              <div className='invalid-feedback'>{errors.secondName}</div>
+            {touched.surname && errors.surname && (
+              <div className='invalid-feedback'>{errors.surname}</div>
             )}
           </div>
           <div className='mb-3'>
@@ -154,7 +154,7 @@ function RegisterPage() {
               <div className='invalid-feedback'>{errors.password}</div>
             )}
           </div>
-          <div className='mb-3'>
+          {/* <div className='mb-3'>
             <label htmlFor='passwordConfirmation' className='form-label'>
               Підтвердіть свій пароль
             </label>
@@ -182,7 +182,7 @@ function RegisterPage() {
                 {errors.passwordConfirmation}
               </div>
             )}
-          </div>
+          </div> */}
           <button type='submit' className='btn btn-primary'>
             Зареєструватися
           </button>

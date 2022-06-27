@@ -35,10 +35,8 @@ const CropperDialog: React.FC<ICropperDialog> = ({
   }, []);
   const handleImageSelect = (e: React.FormEvent<HTMLInputElement>) => {
     let file = (e.currentTarget.files as FileList)[0];
-    console.log('Select image cropper', file);
     if (file) {
       const url = URL.createObjectURL(file);
-      console.log('url show image', url);
       setShow(true);
       setImage(url);
       cropperObj?.replace(url);
