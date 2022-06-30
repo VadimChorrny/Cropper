@@ -8,6 +8,7 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import CropperDialog from '../../common/CropperDialog';
 import register from '../../../services/authentication';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 function RegisterPage() {
   const initialValues: IRegister = {
@@ -18,9 +19,19 @@ function RegisterPage() {
     password: '',
   };
 
+  const [state, setState] = useState<boolean>(true);
+
   const onHandleSubmit = async (values: IRegister) => {
     console.log('Submit form ', values);
     register(values);
+  };
+
+  const onChange = (value: any) => {
+    if (value) {
+      setState(false);
+    } else {
+      setState(true);
+    }
   };
 
   const formik = useFormik({
@@ -154,6 +165,12 @@ function RegisterPage() {
               <div className='invalid-feedback'>{errors.password}</div>
             )}
           </div>
+          <div className='mb-3'>
+            <ReCAPTCHA
+              sitekey='6Le_47EgAAAAAOG6fscbSuEJAsHqq6l7ag4SgVQB'
+              onChange={onChange}
+            />
+          </div>
           {/* <div className='mb-3'>
             <label htmlFor='passwordConfirmation' className='form-label'>
               Підтвердіть свій пароль
@@ -183,7 +200,12 @@ function RegisterPage() {
               </div>
             )}
           </div> */}
-          <button type='submit' className='btn btn-primary'>
+          ,
+          <button
+            type='submit'
+            className='btn btn-primary mb-3'
+            disabled={state}
+          >
             Зареєструватися
           </button>
         </Form>
