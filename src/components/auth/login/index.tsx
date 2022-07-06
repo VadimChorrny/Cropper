@@ -1,9 +1,18 @@
 import { Form, FormikProvider, useFormik } from 'formik';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RegisterSchema } from '../register/validation';
 import { ILogin } from '../../../interfaces/ILogin';
+import { gapi } from 'gapi-script';
+import GoogleLogin, {
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
+import googleAuth from '../../../services/googleAuth';
+import { IGoogleAuthentication } from '../../../interfaces/IGoogleAuthentication';
+import axios from 'axios';
+import { AUTHENTICATION_URLS } from '../../../constants/api/urls';
 
 const LoginPage = () => {
   const initialValues: ILogin = {
@@ -11,8 +20,26 @@ const LoginPage = () => {
     password: '',
   };
 
+  const googleInitialValues: IGoogleAuthentication = {
+    tokenId: '',
+  };
+
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: process.env.REACT_APP_CLIENT_ID,
+        scope: '',
+      });
+    };
+    gapi.load('client:auth2', start);
+  }, []);
+
   const onHandleSubmit = async (values: ILogin) => {
     console.log('Submit form ', values);
+  };
+
+  const onGoogleAuthSubmit = async (values: IGoogleAuthentication) => {
+    googleAuth(values);
   };
 
   const formik = useFormik({
@@ -22,6 +49,20 @@ const LoginPage = () => {
   });
 
   const { errors, touched, handleSubmit, handleChange } = formik;
+
+  const responseGoogle = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline,
+  ) => {
+    console.log('Google response: ', response);
+    axios
+      .post(AUTHENTICATION_URLS.GOOGLE_AUTH, {
+        idToken: (response as GoogleLoginResponse).tokenId,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div>
@@ -74,6 +115,15 @@ const LoginPage = () => {
             {touched.password && errors.password && (
               <div className='invalid-feedback'>{errors.password}</div>
             )}
+          </div>
+          <div className='mb-3'>
+            <GoogleLogin
+              clientId={process.env.REACT_APP_CLIENT_ID as string}
+              buttonText='Google Login'
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              // cookiePolicy={'http://localhost:3000'}
+            />
           </div>
           <Link to='/'>
             <button type='submit' className='btn btn-primary'>

@@ -3,6 +3,7 @@ export const AUTHENTICATION_URL = '/Account';
 
 export const AUTHENTICATION_URLS = {
   REGISTRATION: AUTHENTICATION_URL + '/register',
+  GOOGLE_AUTH: SERVER_URL + AUTHENTICATION_URL + '/google-authenticate',
   LOGIN: AUTHENTICATION_URL + '/login',
   LOGOUT: AUTHENTICATION_URL + '/logout',
   REFRESH_TOKEN: AUTHENTICATION_URL + '/refresh-token',

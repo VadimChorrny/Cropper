@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+$body-bg: #b7b2ec;
+$body-color: #f1eaea;
+$font-family-sans-serif: 'Popins', sans-serif;
+$primary: #000;
+
+@import '../node_modules/bootstrap/scss/bootstrap.scss';

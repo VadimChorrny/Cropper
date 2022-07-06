@@ -1,8 +1,9 @@
 import authenticationService from '../api/authentication';
 import { IRegister } from '../interfaces/IRegister';
 
-export default function register(values: IRegister) {
+export default function register(values: IRegister, recaptchaToken: string) {
   const initialValues: IRegister = {
+    recaptchaToken: recaptchaToken,
     name: values.name,
     surname: values.surname,
     email: values.email,
