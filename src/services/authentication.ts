@@ -10,12 +10,15 @@ export default function register(values: IRegister, recaptchaToken: string) {
     avatar: values.avatar,
     password: values.password,
   };
+
   authenticationService
     .register(initialValues)
     .then(() => {
       console.log('Successfully registered!');
+      return true;
     })
     .catch((error) => {
       console.log('Error: ', error);
+      return false;
     });
 }

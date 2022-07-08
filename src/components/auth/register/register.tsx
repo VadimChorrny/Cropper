@@ -3,17 +3,20 @@ import React, { useState } from 'react';
 import { IRegister } from '../../../interfaces/IRegister';
 import { RegisterSchema } from './validation';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import CropperDialog from '../../common/CropperDialog';
 import register from '../../../services/authentication';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { boolean } from 'yup';
 
 function RegisterPage() {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [bot, setBot] = useState<boolean>(false);
+
+  let navigate = useNavigate();
 
   console.log(process.env.REACT_APP_CLIENT_ID);
 
@@ -35,6 +38,7 @@ function RegisterPage() {
       }
       const recaptchaToken = await executeRecaptcha();
       register(values, recaptchaToken);
+      navigate('/login');
     } catch (error) {
       console.error('Problem: ', error);
     }

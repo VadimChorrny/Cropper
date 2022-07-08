@@ -1,6 +1,6 @@
 import { Form, FormikProvider, useFormik } from 'formik';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { RegisterSchema } from '../register/validation';
 import { ILogin } from '../../../interfaces/ILogin';
@@ -48,6 +48,8 @@ const LoginPage = () => {
     onSubmit: onHandleSubmit,
   });
 
+  let navigate = useNavigate();
+
   const { errors, touched, handleSubmit, handleChange } = formik;
 
   const responseGoogle = (
@@ -60,6 +62,7 @@ const LoginPage = () => {
       })
       .then((res) => {
         console.log(res);
+        navigate('/');
       })
       .catch((err) => console.log(err));
   };
