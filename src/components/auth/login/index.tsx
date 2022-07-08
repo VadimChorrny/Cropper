@@ -13,6 +13,7 @@ import googleAuth from '../../../services/googleAuth';
 import { IGoogleAuthentication } from '../../../interfaces/IGoogleAuthentication';
 import axios from 'axios';
 import { AUTHENTICATION_URLS } from '../../../constants/api/urls';
+import { login } from '../../../services/authentication';
 
 const LoginPage = () => {
   const initialValues: ILogin = {
@@ -36,6 +37,7 @@ const LoginPage = () => {
 
   const onHandleSubmit = async (values: ILogin) => {
     console.log('Submit form ', values);
+    login(values);
   };
 
   const onGoogleAuthSubmit = async (values: IGoogleAuthentication) => {
@@ -62,7 +64,6 @@ const LoginPage = () => {
       })
       .then((res) => {
         console.log(res);
-        navigate('/');
       })
       .catch((err) => console.log(err));
   };
@@ -128,11 +129,9 @@ const LoginPage = () => {
               // cookiePolicy={'http://localhost:3000'}
             />
           </div>
-          <Link to='/'>
-            <button type='submit' className='btn btn-primary'>
-              Увійти
-            </button>
-          </Link>
+          <button type='submit' className='btn btn-primary'>
+            Увійти
+          </button>
         </Form>
       </FormikProvider>
     </div>
